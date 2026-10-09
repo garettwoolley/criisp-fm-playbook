@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>criisp.fm · Tech Employee Playbook</title>
+    <meta
+      name="description"
+      content="Day-one playbook for criisp.fm: languages, Cursor setup, Scrum, GitHub Flow, the live sprint board, AI guardrails, linting, tests, and deploy."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --paper: #f8f5f0;
+        --ink: #111215;
+        --accent: #ff4800;
+        --muted: #e5e0d8;
+        --pin: #2e8aa8;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: Geist, system-ui, sans-serif;
+        line-height: 1.5;
+      }
+      a {
+        color: var(--accent);
+      }
+      a:focus-visible,
+      button:focus-visible {
+        outline: 3px solid var(--pin);
+        outline-offset: 2px;
+      }
+      code,
+      kbd,
+      pre {
+        font-family: "Geist Mono", ui-monospace, monospace;
+        font-size: 0.9em;
+      }
+      code {
+        background: var(--muted);
+        padding: 0.1em 0.35em;
+      }
+      pre {
+        background: var(--ink);
+        color: var(--paper);
+        padding: 1rem 1.1rem;
+        overflow-x: auto;
+        border: 2px solid var(--ink);
+      }
+      pre code {
+        background: none;
+        color: inherit;
+        padding: 0;
+      }
+      .skip {
+        position: absolute;
+        left: 0.75rem;
+        top: -3rem;
+        background: var(--ink);
+        color: var(--paper);
+        padding: 0.5rem 0.75rem;
+        z-index: 20;
+      }
+      .skip:focus {
+        top: 0.75rem;
+      }
+      .frame {
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        min-height: 100vh;
+      }
+      nav {
+        border-right: 2px solid var(--ink);
+        padding: 1.25rem 1rem;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow: auto;
+        background: var(--paper);
+      }
+      nav strong {
+        display: block;
+        font-size: 0.75rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 0.75rem;
+      }
+      nav ol {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      nav a {
+        display: block;
+        color: var(--ink);
+        text-decoration: none;
+        padding: 0.35rem 0.4rem;
+        border-left: 3px solid transparent;
+        font-size: 0.92rem;
+      }
+      nav a:hover,
+      nav a:focus {
+        border-left-color: var(--accent);
+        background: var(--muted);
+      }
+      main {
+        padding: 2rem 2.25rem 4rem;
+        max-width: 52rem;
+      }
+      header.hero {
+        border: 2px solid var(--ink);
+        padding: 1.5rem 1.6rem;
+        box-shadow: 6px 6px 0 var(--ink);
+        margin-bottom: 2rem;
+        background: var(--paper);
+      }
+      header.hero p.kicker {
+        margin: 0 0 0.35rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        font-size: 0.72rem;
+        font-weight: 600;
+      }
+      h1,
+      h2,
+      h3 {
+        line-height: 1.2;
+        font-weight: 650;
+      }
+      h1 {
+        margin: 0 0 0.5rem;
+        font-size: 2rem;
+      }
+      h2 {
+        margin: 2.4rem 0 0.7rem;
+        padding-top: 0.6rem;
+        border-top: 2px solid var(--ink);
+        font-size: 1.35rem;
+        scroll-margin-top: 1rem;
+      }
+      h3 {
+        margin: 1.4rem 0 0.45rem;
+        font-size: 1.05rem;
+      }
+      .meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 1rem;
+      }
+      .chip {
+        border: 2px solid var(--ink);
+        padding: 0.15rem 0.5rem;
+        font-size: 0.8rem;
+        background: var(--muted);
+      }
+      .chip.accent {
+        background: var(--accent);
+        color: #fff;
+        border-color: var(--ink);
+      }
+      ul.check {
+        padding-left: 0;
+        list-style: none;
+      }
+      ul.check li {
+        padding: 0.28rem 0 0.28rem 1.6rem;
+        position: relative;
+      }
+      ul.check li::before {
+        content: "☐";
+        position: absolute;
+        left: 0;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.95rem;
+      }
+      th,
+      td {
+        border: 2px solid var(--ink);
+        padding: 0.45rem 0.55rem;
+        text-align: left;
+        vertical-align: top;
+      }
+      th {
+        background: var(--muted);
+      }
+      .board {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 0.5rem;
+        margin: 1rem 0 1.25rem;
+      }
+      .col {
+        border: 2px solid var(--ink);
+        padding: 0.6rem;
+        min-height: 8rem;
+        background: #fff;
+      }
+      .col h3 {
+        margin: 0 0 0.5rem;
+        font-size: 0.78rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      .card {
+        border: 2px solid var(--ink);
+        padding: 0.45rem 0.5rem;
+        margin-bottom: 0.45rem;
+        font-size: 0.82rem;
+        background: var(--paper);
+      }
+      .card a {
+        color: var(--ink);
+        font-weight: 600;
+      }
+      .callout {
+        border: 2px solid var(--ink);
+        border-left: 8px solid var(--accent);
+        padding: 0.8rem 1rem;
+        background: #fff;
+      }
+      footer {
+        margin-top: 3rem;
+        font-size: 0.85rem;
+        color: #333;
+      }
+      @media (max-width: 860px) {
+        .frame {
+          grid-template-columns: 1fr;
+        }
+        nav {
+          position: relative;
+          height: auto;
+          border-right: 0;
+          border-bottom: 2px solid var(--ink);
+        }
+        nav ol {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.25rem;
+        }
+        .board {
+          grid-template-columns: 1fr 1fr;
+        }
+        main {
+          padding: 1.25rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip" href="#content">Skip to playbook</a>
+    <div class="frame">
+      <nav aria-label="Playbook sections">
+        <strong>criisp.fm playbook</strong>
+        <ol>
+          <li><a href="#day-one">Day-one checklist</a></li>
+          <li><a href="#language">1. Language</a></li>
+          <li><a href="#ide">2. IDE</a></li>
+          <li><a href="#scrum">3. Scrum</a></li>
+          <li><a href="#git">4. Git</a></li>
+          <li><a href="#issues">5. Issue tracking</a></li>
+          <li><a href="#ai">6. AI agents</a></li>
+          <li><a href="#quality">7. Code quality</a></li>
+          <li><a href="#testing">8. Testing</a></li>
+          <li><a href="#other">9. Other controls</a></li>
+        </ol>
+      </nav>
+      <main id="content">
+        <header class="hero">
+          <p class="kicker">Tech employee playbook · day one</p>
+          <h1>Welcome to criisp.fm</h1>
+          <p>
+            You are joining the team that builds a browser mix-revision deck:
+            sample-locked A/B, a cassette shelf, and timestamped mix notes.
+            This page is the getting-started guide — tools, Scrum, and the
+            commands we actually run.
+          </p>
+          <div class="meta">
+            <span class="chip accent">Scrum · 1-week sprints</span>
+            <span class="chip">TypeScript / Next.js 16</span>
+            <span class="chip">Cursor IDE</span>
+            <span class="chip">Updated 9 Oct 2026</span>
+          </div>
+        </header>
+
+        <section id="day-one">
+          <h2>Day-one checklist</h2>
+          <ul class="check">
+            <li>
+              Install
+              <a href="https://cursor.com/download">Cursor</a>
+              (Mac Universal) and
+              <a href="https://nodejs.org/en/download">Node.js 22 LTS</a>
+            </li>
+            <li>
+              Ask Garett to invite you to the private repo
+              <a href="https://github.com/garettwoolley/criisp-fm"
+                >garettwoolley/criisp-fm</a
+              >
+            </li>
+            <li>
+              Clone, install, run — commands are in
+              <a href="#ide">IDE setup</a>
+            </li>
+            <li>
+              Open the live Scrum board:
+              <a href="https://github.com/garettwoolley/criisp-fm-playbook/milestone/1"
+                >Sprint 1 milestone (public)</a
+              >
+              · after access,
+              <a href="https://github.com/garettwoolley/criisp-fm/milestone/1"
+                >product Sprint 1</a
+              >
+            </li>
+            <li>
+              Walk <a href="https://github.com/garettwoolley/criisp-fm/blob/v2/DEMO.md">DEMO.md</a>
+              once on <a href="http://localhost:3000">localhost:3000</a>
+            </li>
+            <li>
+              Run <code>npm run lint</code>, <code>npm test</code>,
+              <code>npm run audit</code>
+            </li>
+            <li>
+              Read the always-on Cursor rule
+              <code>.cursor/rules/criisp.mdc</code>
+            </li>
+          </ul>
+        </section>
+
+        <section id="language">
+          <h2>1. Language selection</h2>
+          <p>
+            We write the product in <strong>TypeScript</strong> (strict) on
+            <strong>React 19</strong> and <strong>Next.js 16</strong> App Router,
+            with <strong>Tailwind CSS v4</strong> and <strong>Zustand</strong>
+            for deck state. Audio is <strong>vanilla Web Audio</strong> — not a
+            React library.
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th>Choice</th>
+                <th>Why this team uses it</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <a href="https://www.typescriptlang.org/docs/handbook/intro.html"
+                    >TypeScript</a
+                  >
+                  · <code>strict: true</code> in
+                  <a
+                    href="https://github.com/garettwoolley/criisp-fm/blob/v2/tsconfig.json"
+                    >tsconfig.json</a
+                  >
+                </td>
+                <td>
+                  Timecodes, version ids, and pin threads are easy to break with
+                  implicit <code>any</code>. One language for UI and logic — we
+                  are a one-engineer startup.
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="https://nextjs.org/docs">Next.js 16.3.8</a> App
+                  Router
+                </td>
+                <td>
+                  Default path to Vercel when sharing ships. We patched to
+                  16.3.8 for
+                  <a href="https://github.com/advisories/GHSA-vcvr-r3jv-pc5j"
+                    >GHSA-vcvr-r3jv-pc5j</a
+                  >
+                  (next/og RCE).
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Web Audio in
+                  <code>lib/audio/deck-engine.ts</code>
+                </td>
+                <td>
+                  <code>AudioContext</code> is a process singleton. React must
+                  not own it. A/B uses a 3ms equal-power crossfade.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            We do not use Python, Go, or a separate API repo. There is no
+            backend in the MVP. Mix files never leave the browser tab.
+          </p>
+        </section>
+
+        <section id="ide">
+          <h2>2. IDE selection and setup</h2>
+          <p>
+            The team IDE is <strong>Cursor</strong>. Download the Mac build from
+            the official page (not a random mirror):
+          </p>
+          <p>
+            <a href="https://cursor.com/download">https://cursor.com/download</a>
+            → macOS → Universal
+          </p>
+          <h3>Setup (do this in order)</h3>
+          <ol>
+            <li>Install Cursor and sign in (Agent will not run without it).</li>
+            <li>
+              File → Open Folder → the <code>criisp-fm</code> clone (not the
+              parent <code>criisp</code> folder).
+            </li>
+            <li>
+              Install the recommended extensions when prompted:
+              <a href="https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode"
+                >Prettier</a
+              >
+              and
+              <a href="https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint"
+                >ESLint</a
+              >. They are listed in
+              <code>.vscode/extensions.json</code>.
+            </li>
+            <li>
+              Confirm format-on-save. We already checked this in
+              <code>.vscode/settings.json</code>:
+              <code>editor.defaultFormatter = esbenp.prettier-vscode</code>
+              and ESLint fix on save.
+            </li>
+            <li>
+              Terminal:
+            </li>
+          </ol>
+          <pre><code>git clone https://github.com/garettwoolley/criisp-fm.git
+cd criisp-fm
+git checkout v2
+npm install
+npm run dev</code></pre>
+          <p>
+            App:
+            <a href="http://localhost:3000">http://localhost:3000</a>
+            · this playbook locally:
+            <a href="http://localhost:3000/playbook"
+              >http://localhost:3000/playbook</a
+            >
+          </p>
+          <p class="callout">
+            VS Code is allowed only if GitHub Copilot and other agents are off.
+            Approved AI is Cursor Tab + Cursor Agent in this repo — see
+            <a href="#ai">§6</a>. We do not mix agent products.
+          </p>
+        </section>
+
+        <section id="scrum">
+          <h2>3. Development strategy — Scrum</h2>
+          <p>
+            We run <strong>Scrum</strong>, not Kanban. That is a process choice,
+            not a tooling accident. The product is a web MVP, but we still want
+            a frozen sprint goal so interview insights do not thrash the deck
+            mid-week. New learning goes on the Product Backlog and waits for
+            the next Sprint Planning (class: changes during a sprint are
+            discouraged).
+          </p>
+          <h3>Roles (class: Product Owner, Development Team, Scrum Master)</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Role</th>
+                <th>Who</th>
+                <th>Does</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Product Owner</td>
+                <td>Garett Woolley</td>
+                <td>
+                  Orders the Product Backlog, names the Sprint Goal, accepts
+                  work in the Sprint Review.
+                </td>
+              </tr>
+              <tr>
+                <td>Scrum Master</td>
+                <td>Garett Woolley (until hire #3)</td>
+                <td>
+                  Protects the sprint from mid-stream scope, runs the five
+                  meetings, keeps WIP honest. When the team is three people,
+                  the new engineer takes Scrum Master so PO and SM are not the
+                  same person.
+                </td>
+              </tr>
+              <tr>
+                <td>Development Team</td>
+                <td>Every engineer writing code, including you</td>
+                <td>
+                  No sub-roles. You pull from the Sprint Backlog, open a PR,
+                  and get the item to Definition of Done.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <h3>Cadence</h3>
+          <ul>
+            <li>
+              <strong>Sprint length:</strong> 1 week, Monday 09:00 MT → Friday
+              16:00 MT.
+            </li>
+            <li>
+              <strong>Current sprint:</strong>
+              <a href="https://github.com/garettwoolley/criisp-fm/milestone/1"
+                >Sprint 1 — Oct 13–17, 2026</a
+              >
+              (due 17 Oct 2026).
+            </li>
+            <li>
+              <strong>Sprint 1 Goal:</strong> a new engineer can clone the
+              repo, run the quality gate, and find committed work on the board.
+            </li>
+            <li>
+              <strong>Estimate:</strong> Fibonacci 1 / 2 / 3 / 5 / 8. Sprint 1
+              capacity is 8 points (playbook 5 + CI 3).
+            </li>
+            <li>
+              <strong>Scope freeze:</strong> if a user interview on Wednesday
+              changes our mind, it becomes a Product Backlog item for Sprint 2.
+              We do not add it to Sprint 1.
+            </li>
+          </ul>
+          <h3>Meetings (class: the five Scrum events)</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>When (Mountain Time)</th>
+                <th>How we run it</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Backlog Grooming</td>
+                <td>Friday 14:00–14:30</td>
+                <td>
+                  PO + Dev Team. Refine stories with the
+                  <a
+                    href="https://github.com/garettwoolley/criisp-fm/blob/v2/.github/ISSUE_TEMPLATE/user-story.md"
+                    >user-story template</a
+                  >. Ready means acceptance criteria + points.
+                </td>
+              </tr>
+              <tr>
+                <td>Sprint Planning</td>
+                <td>Friday 14:30–15:00 (or Mon 09:00)</td>
+                <td>
+                  PO states the Sprint Goal. Team pulls a batch onto the
+                  milestone — not a Kanban one-by-one pull. That batch is the
+                  Sprint Backlog.
+                </td>
+              </tr>
+              <tr>
+                <td>Daily Scrum</td>
+                <td>09:30–09:45, every weekday</td>
+                <td>
+                  15 minutes. Yesterday / today / blocked. When you are the
+                  only engineer, post the three lines on the sprint milestone
+                  before 09:45. Zoom when two or more people are staffed.
+                </td>
+              </tr>
+              <tr>
+                <td>Sprint Review</td>
+                <td>Friday 15:00–15:30</td>
+                <td>
+                  Demo using
+                  <a href="https://github.com/garettwoolley/criisp-fm/blob/v2/DEMO.md"
+                    >DEMO.md</a
+                  >. PO accepts or sends the story back. No slides.
+                </td>
+              </tr>
+              <tr>
+                <td>Sprint Retrospective</td>
+                <td>Friday 15:30–16:00</td>
+                <td>
+                  What helped the Sprint Goal, what blocked it, one process
+                  change for next week. Write the change as a backlog item if
+                  it is work.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <h3>Definition of Done</h3>
+          <ul class="check">
+            <li>Issue is on the current sprint milestone</li>
+            <li>
+              PR into <code>v2</code> (until <code>v2</code> merges to
+              <code>main</code>)
+            </li>
+            <li>
+              CI green: lint, Prettier, Vitest, <code>npm audit --omit=dev</code>,
+              build
+            </li>
+            <li>Review from CODEOWNERS (<code>@garettwoolley</code>)</li>
+            <li>If you touched the deck, DEMO.md still plays</li>
+            <li>Feature branch deleted after squash-merge</li>
+          </ul>
+        </section>
+
+        <section id="git">
+          <h2>4. Git strategy and controls</h2>
+          <p>
+            Branching is <strong>GitHub Flow</strong> (class: short-lived
+            feature branch → pull request → <code>main</code>; best fit for
+            SaaS / startups). We are <strong>not</strong> running Git Flow —
+            there is no <code>develop</code>, <code>release-*</code>, or
+            <code>hotfix-*</code> branch.
+          </p>
+          <p>
+            Reality check: production-ready history lives on
+            <code>main</code>. The live product line is <code>v2</code> until
+            that work is merged. <strong>Branch every story off <code>v2</code></strong>
+            until the Scrum Master says otherwise.
+          </p>
+          <pre><code>git checkout v2
+git pull origin v2
+git checkout -b feat/persist-shelf
+# ... commits ...
+git push -u origin HEAD
+gh pr create --base v2 --title "feat(shelf): persist cassettes in OPFS"</code></pre>
+          <h3>Commit convention</h3>
+          <p>Conventional Commits, imperative, scoped:</p>
+          <pre><code>feat(deck): drag cassette into the candidate well
+fix(audio): keep A/B crossfade at 3ms equal-power
+docs(playbook): add Sprint Review time
+test(timecode): clamp negative seconds to zero
+chore(deps): bump next to 16.3.8</code></pre>
+          <h3>Review / approval controls</h3>
+          <ul>
+            <li>
+              Do not commit to <code>main</code> or <code>v2</code> directly.
+            </li>
+            <li>
+              One approving review from
+              <a
+                href="https://github.com/garettwoolley/criisp-fm/blob/v2/.github/CODEOWNERS"
+                >.github/CODEOWNERS</a
+              >
+              (<code>@garettwoolley</code>).
+            </li>
+            <li>
+              CI on every PR:
+              <code>.github/workflows/ci.yml</code> (lint, format, test, audit,
+              build).
+            </li>
+            <li>
+              Use the PR template
+              <code>.github/PULL_REQUEST_TEMPLATE.md</code> — paste the issue
+              URL.
+            </li>
+            <li>Squash merge. Delete the branch.</li>
+            <li>
+              Never force-push <code>main</code> or <code>v2</code>. Never
+              commit <code>.env*</code>, mix wav/aiff files, or API keys.
+            </li>
+            <li>
+              Pre-commit hook (Husky) runs <code>npx lint-staged</code> —
+              Prettier + ESLint on staged files. Do not skip hooks
+              (<code>--no-verify</code>) unless the Scrum Master agrees in the
+              Daily Scrum.
+            </li>
+          </ul>
+        </section>
+
+        <section id="issues">
+          <h2>5. Issue tracking</h2>
+          <p>
+            Tool: <strong>GitHub Issues</strong>. A sprint is a
+            <strong>milestone</strong>. Columns are <strong>labels</strong>
+            matching the class Scrum board (Product Backlog / Sprint Backlog /
+            In Progress / Blocked / Done).
+          </p>
+          <p>
+            <strong>Live Sprint 1 board (open this):</strong>
+            <a href="https://github.com/garettwoolley/criisp-fm-playbook/milestone/1"
+              >https://github.com/garettwoolley/criisp-fm-playbook/milestone/1</a
+            >
+          </p>
+          <p>
+            The product repo is private, so the public playbook repo carries the
+            board a classmate or professor can open without an invite. After you
+            are added to
+            <a href="https://github.com/garettwoolley/criisp-fm"
+              >garettwoolley/criisp-fm</a
+            >, use the same Sprint 1 there:
+            <a href="https://github.com/garettwoolley/criisp-fm/milestone/1"
+              >https://github.com/garettwoolley/criisp-fm/milestone/1</a
+            >.
+          </p>
+          <div class="board" aria-label="Sprint 1 snapshot with live column links">
+            <div class="col">
+              <h3>
+                <a
+                  href="https://github.com/garettwoolley/criisp-fm/issues?q=is%3Aissue+is%3Aopen+label%3Ascrum%3Aproduct-backlog"
+                  >Product Backlog</a
+                >
+              </h3>
+              <div class="card">
+                <a href="https://github.com/garettwoolley/criisp-fm/issues/3">#3 Persist shelf</a>
+              </div>
+              <div class="card">
+                <a href="https://github.com/garettwoolley/criisp-fm/issues/4">#4 Shareable deck</a>
+              </div>
+              <div class="card">
+                <a href="https://github.com/garettwoolley/criisp-fm/issues/5">#5 Time-range notes</a>
+              </div>
+              <div class="card">
+                <a href="https://github.com/garettwoolley/criisp-fm/issues/6">#6 Version history</a>
+              </div>
+              <div class="card">
+                <a href="https://github.com/garettwoolley/criisp-fm/issues/7">#7 braces advisory</a>
+              </div>
+            </div>
+            <div class="col">
+              <h3>
+                <a
+                  href="https://github.com/garettwoolley/criisp-fm/issues?q=is%3Aissue+milestone%3A%22Sprint+1+%E2%80%94+Oct+13%E2%80%9317%2C+2026%22+label%3Ascrum%3Asprint-backlog"
+                  >Sprint Backlog</a
+                >
+              </h3>
+              <p style="font-size: 0.8rem; margin: 0">
+                Empty — Sprint 1’s batch is already In Progress (planning pulled
+                both Goal items).
+              </p>
+            </div>
+            <div class="col">
+              <h3>
+                <a
+                  href="https://github.com/garettwoolley/criisp-fm/issues?q=is%3Aissue+label%3Ascrum%3Ain-progress"
+                  >In Progress</a
+                >
+              </h3>
+              <div class="card">
+                <a href="https://github.com/garettwoolley/criisp-fm/issues/1">#1 Playbook</a>
+                · Goal
+              </div>
+              <div class="card">
+                <a href="https://github.com/garettwoolley/criisp-fm/issues/2">#2 CI quality gate</a>
+                · Goal
+              </div>
+            </div>
+            <div class="col">
+              <h3>
+                <a
+                  href="https://github.com/garettwoolley/criisp-fm/issues?q=is%3Aissue+label%3Ascrum%3Ablocked"
+                  >Blocked</a
+                >
+              </h3>
+              <p style="font-size: 0.8rem; margin: 0">None.</p>
+            </div>
+            <div class="col">
+              <h3>
+                <a
+                  href="https://github.com/garettwoolley/criisp-fm/issues?q=is%3Aissue+label%3Ascrum%3Adone"
+                  >Done</a
+                >
+              </h3>
+              <div class="card">
+                <a href="https://github.com/garettwoolley/criisp-fm/issues/8">#8 Shelf + wells</a>
+              </div>
+              <div class="card">
+                <a href="https://github.com/garettwoolley/criisp-fm/issues/9">#9 Pin threads</a>
+              </div>
+            </div>
+          </div>
+          <p>
+            File new work with
+            <strong>New issue → User story</strong>. Do not drop work onto
+            In Progress yourself during the week — that is a sprint change.
+            Raise it in Daily Scrum; the PO parks it on the Product Backlog.
+          </p>
+        </section>
+
+        <section id="ai">
+          <h2>6. AI agents and controls</h2>
+          <p>
+            We are at class <strong>Stage 2</strong>: agents help us develop,
+            with different jobs, inside one product (Cursor). We are not Stage 3
+            (cost-routed fleet wired to logs).
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th>Approved</th>
+                <th>Not approved</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <a href="https://cursor.com/download">Cursor Tab</a>
+                  (autocomplete)
+                </td>
+                <td>GitHub Copilot, Windsurf, Replit Agent on this repo</td>
+              </tr>
+              <tr>
+                <td>Cursor Agent / Composer, working tree = <code>criisp-fm</code></td>
+                <td>Pasting mix files, interview PII, or .env values into any model</td>
+              </tr>
+              <tr>
+                <td>Cursor Ask for “why does this fail?”</td>
+                <td>Merging an agent PR you have not read</td>
+              </tr>
+            </tbody>
+          </table>
+          <h3>How to use Agent on a sprint item</h3>
+          <ol>
+            <li>
+              <strong>Inspect / Plan</strong> (higher care): paste the GitHub
+              issue URL, ask Agent to read
+              <code>DEMO.md</code> and
+              <code>.cursor/rules/criisp.mdc</code> before it edits.
+            </li>
+            <li>
+              <strong>Implementation</strong>: Agent writes the diff. You stay
+              on a <code>feat/…</code> branch.
+            </li>
+            <li>
+              <strong>Test / verification</strong>: Agent must run
+              <code>npm test</code> and <code>npm run lint</code>. If it did
+              not, you do.
+            </li>
+            <li>
+              <strong>Code review</strong>: you re-read every hunk. Say so in
+              the PR template’s Agent notes.
+            </li>
+          </ol>
+          <p>
+            The always-apply Cursor rule is
+            <code>.cursor/rules/criisp.mdc</code>. Hard lines: no backend unless
+            the ticket says so; no <code>AudioContext</code> in React state;
+            hardware colors
+            <code>#F8F5F0</code> / <code>#111215</code> /
+            <code>#FF4800</code>; <code>rounded-none</code> on chassis controls.
+          </p>
+        </section>
+
+        <section id="quality">
+          <h2>7. Code quality</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Control</th>
+                <th>Exact setup</th>
+                <th>Command</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Linter</td>
+                <td>
+                  ESLint 9 flat config:
+                  <code>eslint-config-next/core-web-vitals</code> +
+                  <code>eslint-config-next/typescript</code> +
+                  <code>eslint-config-prettier</code>. File:
+                  <code>eslint.config.mjs</code>.
+                </td>
+                <td><code>npm run lint</code></td>
+              </tr>
+              <tr>
+                <td>Formatter</td>
+                <td>
+                  Prettier 3.9 ·
+                  <code>.prettierrc.json</code> (semicolons, double quotes,
+                  trailing commas, print width 80). Format on save in Cursor.
+                </td>
+                <td>
+                  <code>npm run format</code> (check) ·
+                  <code>npm run format:write</code>
+                </td>
+              </tr>
+              <tr>
+                <td>Pre-commit</td>
+                <td>
+                  Husky <code>.husky/pre-commit</code> →
+                  <code>npx lint-staged</code> (Prettier +
+                  <code>eslint --max-warnings=0</code> on staged files).
+                </td>
+                <td>runs on <code>git commit</code></td>
+              </tr>
+              <tr>
+                <td>Vulnerability scan</td>
+                <td>
+                  <code>npm audit --omit=dev</code> in CI. Next.js is on
+                  <strong>16.3.8</strong> for the next/og RCE. Remaining
+                  <code>braces</code> advisory is in the ESLint plugin tree —
+                  tracked as
+                  <a href="https://github.com/garettwoolley/criisp-fm/issues/7"
+                    >issue #7</a
+                  >. We will not
+                  <code>npm audit fix --force</code> (it downgrades to Next 14).
+                </td>
+                <td><code>npm run audit</code></td>
+              </tr>
+              <tr>
+                <td>CI</td>
+                <td>
+                  GitHub Actions
+                  <code>.github/workflows/ci.yml</code> on pull requests and on
+                  push to <code>main</code> / <code>v2</code>. Node 22.
+                </td>
+                <td>must be green to merge</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section id="testing">
+          <h2>8. Testing frameworks</h2>
+          <p>
+            Class listed five startup test types. We are explicit about which
+            ones exist today versus later.
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Status</th>
+                <th>What we use</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1. Unit</td>
+                <td><strong>Required on every PR</strong></td>
+                <td>
+                  <a href="https://vitest.dev">Vitest</a> 4.
+                  <code>vitest.config.ts</code> aliases <code>@/</code>.
+                  Live spec:
+                  <code>lib/audio/timecode.test.ts</code> (zero-pad, clamp
+                  negatives / NaN).
+                </td>
+              </tr>
+              <tr>
+                <td>2. Component</td>
+                <td>Not yet</td>
+                <td>
+                  Add React Testing Library when shelf/wells regress. Do not
+                  invent it on an unrelated ticket.
+                </td>
+              </tr>
+              <tr>
+                <td>3. Integration</td>
+                <td>Not yet</td>
+                <td>No database. Zustand + engine wiring is still manual.</td>
+              </tr>
+              <tr>
+                <td>4. API</td>
+                <td>N/A this MVP</td>
+                <td>There is no HTTP API. Do not add Postman for fun.</td>
+              </tr>
+              <tr>
+                <td>5. End-to-end UI</td>
+                <td>Manual smoke today</td>
+                <td>
+                  Walk
+                  <a href="https://github.com/garettwoolley/criisp-fm/blob/v2/DEMO.md"
+                    >DEMO.md</a
+                  >
+                  (shelf → wells → A/B → pin → reply → resolve) on every deck
+                  PR. Playwright after we deploy to Vercel.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <pre><code>npm test          # vitest run
+npm run test:watch</code></pre>
+          <p>
+            Testing fits Scrum here: a story is not Done if CI’s Vitest job is
+            red, and a deck story is not Done if DEMO.md fails in Review.
+          </p>
+        </section>
+
+        <section id="other">
+          <h2>9. Other controls, tools, and procedures</h2>
+          <h3>Run, build, Node</h3>
+          <p>
+            <code>package.json</code> engines: <code>node &gt;= 20</code>. CI
+            uses Node 22. Install from
+            <a href="https://nodejs.org/en/download">nodejs.org</a>.
+          </p>
+          <pre><code>npm run dev      # http://localhost:3000
+npm run build    # required before you call a story Done
+npm start        # production server locally</code></pre>
+          <h3>Infrastructure / deploy (class: host + how it is created)</h3>
+          <p>
+            Today: <strong>local only</strong>. Mix <code>File</code> objects
+            live in Zustand; a refresh clears the shelf. When share ships we
+            will <strong>outsource infra to Vercel</strong> (class Option 3 —
+            not hand-rolled Terraform). One project, linked to
+            <code>garettwoolley/criisp-fm</code>, production branch
+            <code>main</code> after <code>v2</code> merges. Preview deploys on
+            each PR.
+          </p>
+          <h3>Secrets</h3>
+          <ul>
+            <li>
+              <code>.gitignore</code> already ignores <code>.env*</code>. There
+              are no API keys in the MVP.
+            </li>
+            <li>
+              When Vercel exists, secrets go in the Vercel project env UI — never
+              in the client bundle, never in chat with Agent.
+            </li>
+            <li>Customer audio is not a secret file we store. Do not commit it.</li>
+          </ul>
+          <h3>On-call / incidents</h3>
+          <p>
+            No pager. Garett is the only contact. If localhost audio graphs
+            stick, reload the tab (the engine is a singleton; a wedged
+            AudioContext is recovered by refresh).
+          </p>
+          <h3>Product files you should know</h3>
+          <ul>
+            <li><code>DEMO.md</code> — Review script</li>
+            <li><code>VALIDATION_FINDINGS.md</code> — interview notes</li>
+            <li><code>IDEAS.md</code> — parking lot, not Sprint Backlog</li>
+            <li>
+              <code>lib/audio/deck-engine.ts</code> — transport; do not
+              reimplement in a component
+            </li>
+          </ul>
+          <h3>Who to ping</h3>
+          <p>
+            Product Owner / Scrum Master: Garett Woolley · GitHub
+            <a href="https://github.com/garettwoolley">@garettwoolley</a>
+          </p>
+        </section>
+
+        <footer>
+          <p>
+            criisp.fm tech employee playbook · published at
+            <a href="https://garettwoolley.github.io/criisp-fm-playbook/"
+              >garettwoolley.github.io/criisp-fm-playbook</a
+            >
+            · source in the product app at <code>/playbook</code>.
+          </p>
+        </footer>
+      </main>
+    </div>
+  </body>
+</html>
